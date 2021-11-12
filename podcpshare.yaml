@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: podcpshare
+  namespace: hyperledger
+spec:
+  containers:
+  - image: k8s.gcr.io/echoserver:1.4
+    name: podcpshare-container
+    volumeMounts:
+    - mountPath: /shared
+      name: shared-volume
+  volumes:
+  - name: shared-volume
+    persistentVolumeClaim:
+      claimName: share-pvc

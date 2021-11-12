@@ -1,0 +1,70 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: docker
+  namespace: hyperledger
+  labels:
+    run: docker
+spec:
+  selector:
+    name: docker
+  ports:
+  - name: tcp
+    protocol: TCP
+    targetPort: 2375
+    port: 2375
+  - name: tcps
+    protocol: TCP
+    targetPort: 2376
+    port: 2376
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-dind
+  namespace: hyperledger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: docker
+  template:
+    metadata:
+      labels:
+        name: docker
+    spec:
+      volumes:
+      - name: dockervolume
+        persistentVolumeClaim:
+          claimName: docker-pvc
+      - name: dockersock
+        persistentVolumeClaim:
+          claimName: docker-sock-pvc
+      initContainers:
+      - name: chwhome
+        image: "busybox"
+        command: ['sh', '-c', 'chmod -R 777 /rootless']
+        securityContext:
+          runAsUser: 0
+          privileged: true
+        volumeMounts:
+          - name: dockervolume
+            mountPath: /rootless
+      containers:
+      - name: docker
+        env:
+          - name: DOCKER_TLS_CERTDIR
+            value: ""
+        securityContext:
+          runAsUser: 1000
+          privileged: true
+        image: "docker:dind-rootless"
+        ports:
+        - containerPort: 2375
+        - containerPort: 2376
+        volumeMounts:
+          - name: dockervolume
+            mountPath: /home/rootless/.local/share/docker
+          - name: dockersock
+            mountPath: /share

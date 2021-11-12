@@ -1,0 +1,38 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: docker-pvc
+  namespace: hyperledger
+  annotations:
+    ibm.io/auto-create-bucket: "true"
+    ibm.io/auto-delete-bucket: "false"
+    ibm.io/auto_cache: "true"
+    ibm.io/bucket: "k8s-ndid-docker-pvc"
+    ibm.io/secret-name: "cos-manager-access"
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: ibmc-s3fs-standard-regional
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: docker-sock-pvc
+  namespace: hyperledger
+  annotations:
+    ibm.io/auto-create-bucket: "true"
+    ibm.io/auto-delete-bucket: "false"
+    ibm.io/auto_cache: "true"
+    ibm.io/bucket: "k8s-ndid-docker-sock-pvc"
+    ibm.io/secret-name: "cos-manager-access"
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: ibmc-s3fs-standard-regional

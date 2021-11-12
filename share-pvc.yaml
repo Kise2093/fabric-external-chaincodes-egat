@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: share-pvc
+  namespace: hyperledger
+  annotations:
+    ibm.io/auto-create-bucket: "true"
+    ibm.io/auto-delete-bucket: "false"
+    ibm.io/auto_cache: "true"
+    ibm.io/bucket: "k8s-ndid-share-pvc"
+    ibm.io/secret-name: "cos-manager-access"
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: ibmc-s3fs-standard-regional
