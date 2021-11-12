@@ -53,4 +53,4 @@ spec:
             claimName: share-pvc
         - name: ca-persistentdata
           persistentVolumeClaim:
-            claimName: org1-ca-pvc
+            claimName: org2-ca-pvc
