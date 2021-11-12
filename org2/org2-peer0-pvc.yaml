@@ -10,5 +10,5 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  storageClassName: ibmc-vpc-block-10iops-tier
+  storageClassName: rook-cephfs
   volumeMode: Filesystem
