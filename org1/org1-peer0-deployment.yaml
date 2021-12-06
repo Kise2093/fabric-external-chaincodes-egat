@@ -30,8 +30,6 @@ spec:
               value: INFO
             - name: CORE_PEER_ADDRESS
               value: peer0-org1:7051
-            - name: CORE_PEER_LISTENADDRESS
-              value: 0.0.0.0:7051
             - name: CORE_PEER_GOSSIP_EXTERNALENDPOINT
               value: peer0-org1:7051
             - name: CORE_PEER_CHAINCODELISTENADDRESS
@@ -54,12 +52,20 @@ spec:
               value: /share/crypto-config/peerOrganizations/org1/peers/peer0-org1/tls/server.key
             - name: CORE_PEER_TLS_ROOTCERT_FILE
               value: /share/crypto-config/peerOrganizations/org1/peers/peer0-org1/tls/ca.crt
+            - name: CORE_VM_ENDPOINT
+              value: http://localhost:2375
             - name: CORE_OPERATIONS_LISTENADDRESS
               value: 0.0.0.0:9443
             - name: CORE_METRICS_PROVIDER
               value: prometheus
             - name: CORE_PEER_MSPCONFIGPATH
               value: /share/crypto-config/peerOrganizations/org1/peers/peer0-org1/msp
+            - name: CORE_VM_ENDPOINT
+              value: unix:///host/var/run/docker.sock
+            - name: CORE_CHAINCODE_BUILDER
+              value: hyperledger/fabric-ccenv:amd64-2.2.0
+            - name: CORE_CHAINCODE_NODE_RUNTIME
+              value: hyperledger/fabric-nodeenv:amd64-2.2.0
           image: hyperledger/fabric-peer:amd64-2.2.0
           name: peer0
           ports:
@@ -68,6 +74,8 @@ spec:
             - containerPort: 7053
             - containerPort: 9443
           volumeMounts:
+            - mountPath: /host/var/run/
+              name: cli-claim0
             - mountPath: /var/hyperledger/production
               name: peer0-persistentdata
             - mountPath: /share
@@ -86,6 +94,10 @@ spec:
               subPath: release
       restartPolicy: Always
       volumes:
+        - hostPath:
+            path: /var/run/
+            type: Directory
+          name: cli-claim0
         - name: peer0-persistentdata
           persistentVolumeClaim:
             claimName: org1-peer0-pvc
