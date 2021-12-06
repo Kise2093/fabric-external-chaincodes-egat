@@ -7,7 +7,7 @@ metadata:
         app: hyperledger
 data:
     detect: |
-        #!/bin/sh
+        #!/bin/bash
 
         # The bin/detect script is responsible for determining whether or not a buildpack 
         # should be used to build a chaincode package and launch it. 
