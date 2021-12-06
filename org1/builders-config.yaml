@@ -27,17 +27,10 @@ data:
 
         # use jq to extract the chaincode type from metadata.json and exit with
         # success if the chaincode type is golang
-        #echo "=Begin-detect-" >> /share/detect.log
-        #cat "$CHAINCODE_METADATA_DIR/metadata.json" >> /share/detect.log
-        #echo "=1===" >> /share/detect.log
-        #echo $(cat "$CHAINCODE_METADATA_DIR/metadata.json" | sed -e 's/[{}]/''/g' | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'type'\042/){print $(i+1)}}}' | tr -d '"') >> /share/detect.log
-        #echo "=2===" >> /share/detect.log
-
-        if [ $(cat "$CHAINCODE_METADATA_DIR/metadata.json" | sed -e 's/[{}]/''/g' | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'type'\042/){print $(i+1)}}}' | tr -d '"') == "external" ]; then
-        #    echo "==End-detect-exit 0-" >> /share/detect.log
+        if [ "$(cat "$CHAINCODE_METADATA_DIR/metadata.json" | sed -e 's/[{}]/''/g' | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'type'\042/){print $(i+1)}}}' | tr -d '"')" = "external" ]; then
             exit 0
         fi
-        #echo "==End-detect-exit 1-" >> /share/detect.log
+
         exit 1
 
     build: |
@@ -61,15 +54,9 @@ data:
 
         set -euo pipefail
 
-        #echo "=Begin-build-" >> /share/detect.log
-        #echo "CHAINCODE_SOURCE_DIR=$CHAINCODE_SOURCE_DIR" >> /share/detect.log
-        #echo "CHAINCODE_METADATA_DIR=$CHAINCODE_METADATA_DIR" >> /share/detect.log
-        #echo "BUILD_OUTPUT_DIR=$BUILD_OUTPUT_DIR" >> /share/detect.log
-
         #external chaincodes expect connection.json file in the chaincode package
         if [ ! -f "$CHAINCODE_SOURCE_DIR/connection.json" ]; then
             >&2 echo "$CHAINCODE_SOURCE_DIR/connection.json not found"
-         #   echo "$CHAINCODE_SOURCE_DIR/connection.json not found =End-build exit 1-" >> /share/detect.log
             exit 1
         fi
 
@@ -80,7 +67,6 @@ data:
             cp -a $CHAINCODE_SOURCE_DIR/metadata $BUILD_OUTPUT_DIR/metadata
         fi
 
-        #echo "=End-build exit 0-" >> /share/detect.log
         exit 0
 
     release: |
@@ -101,10 +87,6 @@ data:
         BUILD_OUTPUT_DIR="$1"
         RELEASE_OUTPUT_DIR="$2"
 
-        #echo "=Begin-release-" >> /share/detect.log
-        #echo "BUILD_OUTPUT_DIR=$BUILD_OUTPUT_DIR" >> /share/detect.log
-        #echo "RELEASE_OUTPUT_DIR=$RELEASE_OUTPUT_DIR" >> /share/detect.log
-
         # copy indexes from metadata/* to the output directory
         # if [ -d "$BUILD_OUTPUT_DIR/metadata" ] ; then
         #    cp -a "$BUILD_OUTPUT_DIR/metadata/"* "$RELEASE_OUTPUT_DIR/"
@@ -117,11 +99,9 @@ data:
 
         #if tls_required is true, copy TLS files (using above example, the fully qualified path for these fils would be "$RELEASE_OUTPUT_DIR"/chaincode/server/tls)
 
-        #echo "=End-release- exit 0" >> /share/detect.log
         exit 0
         fi
 
-        #echo "=End-release- exit 1" >> /share/detect.log
         exit 1
     core.yaml: |
         # Copyright IBM Corp. All Rights Reserved.
@@ -564,22 +544,22 @@ data:
             # unix:///var/run/docker.sock
             # http://localhost:2375
             # https://localhost:2376
-            #endpoint: unix:///host/var/run/containerd/containerd.sock
+            endpoint: unix:///var/run/docker.sock
 
             # settings for docker vms
-            #docker:
-            #    tls:
-            #        enabled: false
-            #        ca:
-            #            file: docker/ca.crt
-            #        cert:
-            #            file: docker/tls.crt
-            #        key:
-            #            file: docker/tls.key
+            docker:
+                tls:
+                    enabled: false
+                    ca:
+                        file: docker/ca.crt
+                    cert:
+                        file: docker/tls.crt
+                    key:
+                        file: docker/tls.key
 
                 # Enables/disables the standard out/err from chaincode containers for
                 # debugging purposes
-            #    attachStdout: false
+                attachStdout: false
 
                 # Parameters on creating docker container.
                 # Container may be efficiently created using ipam & dns-server for cluster
@@ -592,16 +572,16 @@ data:
                 # (Config) for Docker. For more info,
                 # https://docs.docker.com/engine/admin/logging/overview/
                 # Note: Set LogConfig using Environment Variables is not supported.
-            #    hostConfig:
-            #        NetworkMode: host
-            #        Dns:
+                hostConfig:
+                    NetworkMode: host
+                    Dns:
                       # - 192.168.0.1
-            #        LogConfig:
-            #            Type: json-file
-            #            Config:
-            #                max-size: "50m"
-            #                max-file: "5"
-            #        Memory: 2147483648
+                    LogConfig:
+                        Type: json-file
+                        Config:
+                            max-size: "50m"
+                            max-file: "5"
+                    Memory: 2147483648
 
         ###############################################################################
         #
