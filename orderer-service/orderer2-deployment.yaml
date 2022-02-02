@@ -18,6 +18,8 @@ spec:
       labels:
         app: orderer2
     spec:
+      nodeSelector:
+        tier: api
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
