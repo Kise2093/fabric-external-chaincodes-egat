@@ -4,6 +4,8 @@ metadata:
   name: podcpshare
   namespace: hyperledger
 spec:
+  nodeSelector:
+        tier: api
   containers:
   - image: k8s.gcr.io/echoserver:1.4
     name: podcpshare-container
