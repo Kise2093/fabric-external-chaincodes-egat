@@ -27,26 +27,26 @@ data:
 
         # use jq to extract the chaincode type from metadata.json and exit with
         # success if the chaincode type is golang
-        echo "=Begin-detect-" >> /share/detect.log
-        cat "$CHAINCODE_METADATA_DIR/metadata.json" >> /share/detect.log
-        echo "=1===" >> /share/detect.log
-        echo $(cat "$CHAINCODE_METADATA_DIR/metadata.json" | sed -e 's/[{}]/''/g' | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'type'\042/){print $(i+1)}}}' | tr -d '"') >> /share/detect.log
-        echo "=2===" >> /share/detect.log
+        #echo "=Begin-detect-" >> /share/detect.log
+        #cat "$CHAINCODE_METADATA_DIR/metadata.json" >> /share/detect.log
+        #echo "=1===" >> /share/detect.log
+        #echo $(cat "$CHAINCODE_METADATA_DIR/metadata.json" | sed -e 's/[{}]/''/g' | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'type'\042/){print $(i+1)}}}' | tr -d '"') >> /share/detect.log
+        #echo "=2===" >> /share/detect.log
 
         TYPE="$(cat "$CHAINCODE_METADATA_DIR/metadata.json" | sed -e 's/[{}]/''/g' | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'type'\042/){print $(i+1)}}}' | tr -d '"')"
-        echo "$TYPE" >> /share/detect.log
+        #echo "$TYPE" >> /share/detect.log
         #if [[ "$(cat "$CHAINCODE_METADATA_DIR/metadata.json" | sed -e 's/[{}]/''/g' | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'type'\042/){print $(i+1)}}}' | tr -d '"')" == "external" ]]; then
         
         
         if [ $TYPE == "external" ]; then
-          echo "==End-detect-exit 0-" >> /share/detect.log
+          #echo "==End-detect-exit 0-" >> /share/detect.log
           exit 0
         fi
 
 
 
 
-        echo "==End-detect-exit 1-" >> /share/detect.log
+        #echo "==End-detect-exit 1-" >> /share/detect.log
         exit 1
 
     build: |
