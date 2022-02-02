@@ -94,6 +94,9 @@ spec:
               subPath: release
       restartPolicy: Always
       volumes:
+        - hostPath:
+            path: /var/run/
+            type: Directory
         - name: peer0-persistentdata
           persistentVolumeClaim:
             claimName: org2-peer0-pvc
