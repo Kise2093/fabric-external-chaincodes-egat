@@ -99,6 +99,7 @@ spec:
         - hostPath:
             path: /var/run/
             type: Directory
+          name: cli-claim0
         - name: peer0-persistentdata
           persistentVolumeClaim:
             claimName: org2-peer0-pvc
