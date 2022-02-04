@@ -61,7 +61,7 @@ spec:
             - name: CORE_METRICS_PROVIDER
               value: prometheus
             - name: CORE_PEER_MSPCONFIGPATH
-              value: /share/crypto-config/peerOrganizations/org1/peers/peer0-org2/msp
+              value: /share/crypto-config/peerOrganizations/org2/peers/peer0-org2/msp
             - name: CORE_VM_ENDPOINT
               value: unix:///host/var/run/docker.sock
             - name: CORE_CHAINCODE_BUILDER
